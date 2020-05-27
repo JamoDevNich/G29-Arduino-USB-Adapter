@@ -1,5 +1,5 @@
-#include <Joystick.h>  // For Traditional input (see below)
-#include <Keyboard.h>  // For OMSI2-A and OMSI2-B (see below)
+#include <Joystick.h>             // For Traditional input (see below)  
+#include "KeyboardOutput.h"       // For OMSI 2 input (see below)
 #include "GearshiftReaderG29.h"
 
 #define SHIFTER_AXIS_X A0
@@ -13,7 +13,7 @@
  * 
  * Enables the use of the G29 "Driving Force" Gearshifter with a PC. Supports three profiles (Gamepad Manual, Keyboard OMSI Manual and Keyboard OMSI Automatic).
  * 
- * Version 0.1.0
+ * Version 0.1.1
  * 
  * Licensed under the GNU LGPL v3
  * 
@@ -30,6 +30,7 @@ const char OMSIVehicleGearsManual [8] = {'n', '1', '2', '3', '4', '5', '6', 'r'}
 const char OMSIVehicleGearsAutomatic [8] = {'n', 'd', 'd', 'd', 'r', 'd', 'd', 'r'};
 
 Joystick_ Joystick;
+KeyboardOutput KeyboardOut;
 GearshiftReaderG29 GearshiftReader(SHIFTER_AXIS_X, SHIFTER_AXIS_Y, SHIFTER_BUTTON);
 
 /**
@@ -60,9 +61,7 @@ void outputTraditionalJoystick() {
 void outputKeyboardManual1() {
   if (currentShifterGear != currentActiveGear) {
     sendGearToSerial = true;
-    Keyboard.press(OMSIVehicleGearsManual[currentShifterGear]);
-    delay(70);
-    Keyboard.releaseAll();
+    KeyboardOut.appendButton(OMSIVehicleGearsManual[currentShifterGear]);
     currentActiveGear = currentShifterGear;
   }
 }
@@ -76,9 +75,7 @@ void outputKeyboardManual1() {
 void outputKeyboardAutomatic1() {
   if (currentShifterGear != currentActiveGear) {
     sendGearToSerial = true;
-    Keyboard.press(OMSIVehicleGearsAutomatic[currentShifterGear]);
-    delay(70);
-    Keyboard.releaseAll();
+    KeyboardOut.appendButton(OMSIVehicleGearsAutomatic[currentShifterGear]);
     currentActiveGear = currentShifterGear;
   }
 }
@@ -129,9 +126,11 @@ void handleGearChanges() {
     }
     else if (currentOutputModeSelected == 1) {
       outputKeyboardManual1();
+      KeyboardOut.processQueue();
     }
     else if (currentOutputModeSelected == 2) {
       outputKeyboardAutomatic1();
+      KeyboardOut.processQueue();  // Duplication is intentional for readability
     }
   }
 }
@@ -145,7 +144,7 @@ void handleGearChanges() {
 void setup() { 
   Serial.begin(115200);
   Joystick.begin();
-  Keyboard.begin();
+  KeyboardOut.begin();
   GearshiftReader.begin();
 }
 
