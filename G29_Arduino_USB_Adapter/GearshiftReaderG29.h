@@ -6,15 +6,14 @@
  * Arduino Library
  * by JamoDevNich <github@nich.dev>
  * 
- * Version 0.1.0
+ * Version 0.1.1
  * 
  * Licensed under the GNU LGPL v3
  * 
  * (c) 2020
  ****************************************************************************/
 
-class GearshiftReaderG29
-{
+class GearshiftReaderG29 {
   private:
     bool initialised = false;
     unsigned short analogPinAxisX = 0;

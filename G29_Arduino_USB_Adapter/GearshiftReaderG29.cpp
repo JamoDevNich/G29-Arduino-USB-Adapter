@@ -6,7 +6,7 @@
  * Arduino Library
  * by JamoDevNich <github@nich.dev>
  * 
- * Version 0.1.0
+ * Version 0.1.1
  * 
  * Licensed under the GNU LGPL v3
  * 
@@ -76,9 +76,9 @@ bool GearshiftReaderG29::readShifterButton(bool debounce) {
 /**
  * Library providing quick access to the Logitech G29 Shifter
  * 
- * @param analogPinAxisX the ADC pin connected to the gearshifter X axis
- * @param analogPinAxisY the ADC pin connected to the gearshifter Y axis
- * @param digitalPinButton the digital pin connected to the gearshifter button
+ * @param short analogPinAxisX the ADC pin connected to the gearshifter X axis
+ * @param short analogPinAxisY the ADC pin connected to the gearshifter Y axis
+ * @param short digitalPinButton the digital pin connected to the gearshifter button
  */
 GearshiftReaderG29::GearshiftReaderG29(short analogPinAxisX, short analogPinAxisY, short digitalPinButton) {
   this->analogPinAxisX = analogPinAxisX;
