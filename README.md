@@ -27,7 +27,7 @@ This was developed on an Arduino Pro Micro. The table below contains the pinout 
 ### Switching profiles
 Switching profiles is done by pressing the gearshifter down three times. There are three included profiles:
 1. Gamepad Input - each gear position (except Neutral) is mapped to buttons 1-7 **(Default)**
-2. Keyboard Input, OMSI Automatic - each gear position is mapped to numbers 1-6 and letters 'r' and 'n'
-3. Keyboard Input, OMSI Manual - Each gear position is mapped to letters 'r', 'n' and 'd'
+2. Keyboard Input, OMSI Manual - each gear position is mapped to numbers 1-6 and letters 'r' and 'n'
+3. Keyboard Input, OMSI Automatic - Each gear position is mapped to letters 'r', 'n' and 'd'
 
 Adding new profiles will require you to get your hands dirty in code. If help is needed feel free to open a new issue.
