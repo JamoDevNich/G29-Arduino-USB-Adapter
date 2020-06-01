@@ -2,7 +2,7 @@
 
 Use the G29 "Driving Force" gearshifter on a PC with support for three input profiles
 
-Version 0.1.1
+Version 0.1.2
 
 ## Getting Started
 ### Requirements
