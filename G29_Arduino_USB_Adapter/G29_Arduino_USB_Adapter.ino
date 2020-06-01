@@ -7,13 +7,15 @@
 #define SHIFTER_BUTTON 10
 #define NEUTRAL_GEAR 0
 
+#define VERSION "0.1.2"
+
 /****************************************************************************
  * G29 Arduino USB Adapter
  * by JamoDevNich <github@nich.dev>
  * 
  * Enables the use of the G29 "Driving Force" Gearshifter with a PC. Supports three profiles (Gamepad Manual, Keyboard OMSI Manual and Keyboard OMSI Automatic).
  * 
- * Version 0.1.1
+ * Version 0.1.2
  * 
  * Licensed under the GNU LGPL v3
  * 
@@ -158,7 +160,7 @@ void loop() {
   handleModeSwitching();
   
   if (sendGearToSerial) {
-    Serial.println("currentActiveGear:" + String(currentActiveGear) + ", currentShifterGear:" + String(currentShifterGear) + ", currentOutputModeSelected:" + String(currentOutputModeSelected) + ", shifterPressCount:" + String(shifterPressCount));
+    Serial.println("Version:" + String(VERSION) + ", currentActiveGear:" + String(currentActiveGear) + ", currentShifterGear:" + String(currentShifterGear) + ", currentOutputModeSelected:" + String(currentOutputModeSelected) + ", shifterPressCount:" + String(shifterPressCount) + ", GearshiftReader.shifterConnected():" + String(GearshiftReader.shifterConnected()));
     sendGearToSerial = false;
   } 
 }
