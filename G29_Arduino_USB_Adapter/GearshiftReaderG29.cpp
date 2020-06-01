@@ -6,7 +6,7 @@
  * Arduino Library
  * by JamoDevNich <github@nich.dev>
  * 
- * Version 0.1.1
+ * Version 0.1.2
  * 
  * Licensed under the GNU LGPL v3
  * 
@@ -14,29 +14,49 @@
  ****************************************************************************/
 
 /**
+ * Read inputs
+ * 
+ * Read the gearshift input ADCs and assign their values to internal variables.
+ */
+void GearshiftReaderG29::readInputs() {
+  this->shifterAxisX=analogRead(this->analogPinAxisX);
+  this->shifterAxisY=analogRead(this->analogPinAxisY);
+
+  // If shifter is disconnected
+  if (this->shifterAxisX > 920 && this->shifterAxisY > 920) {
+    this->shifterIsConnected = false;
+  } else {
+    this->shifterIsConnected = true;
+  }
+}
+
+/**
  * Read shifter position
  * 
- * Reads the ADC values from the gear shifter and returns a position 1-6. It is recommended to use currentPosition() instead.
+ * Reads internal gearstick position variables and returns a position 1-6. It is recommended to use currentPosition() instead.
  * 
  * @return byte Current gear position 0-6
  */
 byte GearshiftReaderG29::readShifterPosition() {
-  unsigned short shifterAxisX=analogRead(this->analogPinAxisX);
-  unsigned short shifterAxisY=analogRead(this->analogPinAxisY);
-
+  // Request inputs be read
+  this->readInputs();
+  
+  // Return the last known state if shifter disconnected
+  if (!this->shifterIsConnected) return this->lastShifterPosition;
+  
   // Top row of gears
-  if (shifterAxisY > 700) {
+  if (this->shifterAxisY > 700) {
     // Rows 1-3 respectively
-    if (shifterAxisX < 365) return 1;
-    else if (shifterAxisX < 580) return 3;
+    if (this->shifterAxisX < 365) return 1;
+    else if (this->shifterAxisX < 580) return 3;
     else return 5;
   }
   
   // Bottom row of gears
-  else if (shifterAxisY < 300) {
+  else if (this->shifterAxisY < 300) {
     // Rows 1-3 respectively
-    if (shifterAxisX < 365) return 2;
-    else if (shifterAxisX < 580) return 4;
+    if (this->shifterAxisX < 365) return 2;
+    else if (this->shifterAxisX < 580) return 4;
     else return 6;
   }
 
@@ -63,6 +83,9 @@ bool GearshiftReaderG29::readShifterButton() {
  * @return bool True if gearshift is pressed, otherwise false
  */
 bool GearshiftReaderG29::readShifterButton(bool debounce) {
+  // If shifter is disconnected, button cannot be in a 'held down' state
+  if (!this->shifterIsConnected) return false;
+  
   bool shifterPressed = digitalRead(this->digitalPinButton);
   if (debounce && this->shifterWasPreviouslyHeldDown && shifterPressed) {
     shifterPressed = false;
@@ -117,4 +140,15 @@ byte GearshiftReaderG29::currentPosition() {
 
   this->lastShifterPosition = currentPosition;
   return currentPosition;
+}
+
+/**
+ * Check if shifter connected
+ * 
+ * Returns the current state of shifterIsConnected.
+ * 
+ * @return bool True if connected, false if disconnected
+ */
+bool GearshiftReaderG29::shifterConnected() {
+  return this->shifterIsConnected;
 }
